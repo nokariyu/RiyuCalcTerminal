@@ -3,7 +3,7 @@ set -e
 
 APP_NAME="RiyuCalc"
 APP_DIR="$PREFIX/share/riyucalc"
-BIN_NAME="R"
+BIN_NAME="R calc"
 REPO_RAW="https://raw.githubusercontent.com/nokariyu/RiyuCalcTerminal/main"
 
 echo "[*] Installing $APP_NAME..."
@@ -17,9 +17,9 @@ mkdir -p "$APP_DIR"
 
 echo "[*] Downloading program files..."
 curl -fsSL "$REPO_RAW/RiyuCalc-1.0.jar" -o "$APP_DIR/RiyuCalc-1.0.jar"
-curl -fsSL "$REPO_RAW/R" -o "$PREFIX/bin/$BIN_NAME"
+curl -fsSL "$REPO_RAW/R calc" -o "$PREFIX/bin/$BIN_NAME"
 
 chmod +x "$PREFIX/bin/$BIN_NAME"
 
 echo "[✓] $APP_NAME installed successfully!"
-echo "Run with: $BIN_NAME calc"
+echo "Run with: $BIN_NAME"
