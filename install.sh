@@ -1,10 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/sh
-
 set -e
 
 APP_NAME="RiyuCalc"
 APP_DIR="$PREFIX/share/riyucalc"
 BIN_NAME="R"
+REPO_RAW="https://raw.githubusercontent.com/nokariyu/RiyuCalcTerminal/main"
 
 echo "[*] Installing $APP_NAME..."
 
@@ -15,9 +15,10 @@ fi
 
 mkdir -p "$APP_DIR"
 
-cp RiyuCalc-1.0.jar "$APP_DIR/"
+echo "[*] Downloading program files..."
+curl -fsSL "$REPO_RAW/RiyuCalc-1.0.jar" -o "$APP_DIR/RiyuCalc-1.0.jar"
+curl -fsSL "$REPO_RAW/R" -o "$PREFIX/bin/$BIN_NAME"
 
-cp R "$PREFIX/bin/$BIN_NAME"
 chmod +x "$PREFIX/bin/$BIN_NAME"
 
 echo "[✓] $APP_NAME installed successfully!"
