@@ -1,0 +1,3 @@
+#!/data/data/com.termux/files/usr/bin/sh
+
+java -jar $PREFIX/share/riyucalc/RiyuCalc-1.1.jar "$@"
