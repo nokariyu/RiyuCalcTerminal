@@ -4,7 +4,7 @@ set -e
 APP_NAME="RiyuCalc"
 APP_DIR="$PREFIX/share/riyucalc"
 BIN_NAME="riyuc"
-REPO_RAW="https://raw.githubusercontent.com/nokariyu/RiyuCalcTerminal/main"
+REPO_RAW="https://raw.githubusercontent.com/nokariyu/RiyuCalcTerminal/main/version"
 
 install_java() {
   if ! command -v java >/dev/null 2>&1; then
