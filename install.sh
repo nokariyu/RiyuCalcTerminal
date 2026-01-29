@@ -4,7 +4,7 @@ set -e
 APP_NAME="RiyuCalc"
 APP_DIR="$PREFIX/share/riyucalc"
 BIN_NAME="riyuc"
-REPO_RAW="https://raw.githubusercontent.com/nokariyu/RiyuCalcTerminal/main/version"
+REPO_RAW="https://raw.githubusercontent.com/nokariyu/RiyuCalcTerminal/main"
 
 install_java() {
   if ! command -v java >/dev/null 2>&1; then
@@ -21,7 +21,7 @@ install_version() {
 
   mkdir -p "$APP_DIR"
 
-  curl -fsSL "$REPO_RAW/versions/$VERSION/$JAR_NAME" \
+  curl -fsSL "$REPO_RAW/version/$JAR_NAME" \
     -o "$APP_DIR/$JAR_NAME"
 
   cat > "$PREFIX/bin/$BIN_NAME" <<EOF
