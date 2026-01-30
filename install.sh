@@ -6,12 +6,28 @@ APP_DIR="$PREFIX/share/riyucalc"
 BIN_NAME="riyuc"
 REPO_RAW="https://raw.githubusercontent.com/nokariyu/RiyuCalcTerminal/main"
 
-install_java() {
-  if ! command -v java >/dev/null 2>&1; then
-    echo "[*] Java not found, installing OpenJDK 17..."
-    pkg install -y openjdk-17
-  fi
-}
+if ! command -v java >/dev/null 2>&1; then
+  echo "[!] Java not found."
+  echo "[!] Please install Java 21 or newer."
+  exit 1
+fi
+
+# 2. ambil versi java (major)
+JAVA_VERSION=$(java -version 2>&1 | sed -n 's/.*"\([0-9]\+\).*/\1/p')
+
+echo "[*] Detected Java version: $JAVA_VERSION"
+
+if [ "$JAVA_VERSION" -ge 24 ]; then
+  JAR_PATH="versions/jdk24"
+elif [ "$JAVA_VERSION" -ge 21 ]; then
+  JAR_PATH="versions/jdk21"
+else
+  echo "[!] Java version too old."
+  echo "[!] Minimum supported version is Java 21."
+  exit 1
+fi
+
+echo "[*] Using JAR: $JAR_PATH"
 
 install_version() {
   VERSION="$1"
@@ -21,7 +37,7 @@ install_version() {
 
   mkdir -p "$APP_DIR"
 
-  curl -fsSL "$REPO_RAW/version/$JAR_NAME" \
+  curl -fsSL "$REPO_RAW/$JAR_PATH/$JAR_NAME" \
     -o "$APP_DIR/$JAR_NAME"
 
   cat > "$PREFIX/bin/$BIN_NAME" <<EOF
@@ -37,15 +53,15 @@ EOF
 
 case "$1" in
   v1.0)
-    install_java
+    
     install_version "1.0"
     ;;
   v1.1)
-    install_java
+    
     install_version "1.1"
     ;;
   latest|"")
-    install_java
+    
     install_version "1.1"
     ;;
   *)
