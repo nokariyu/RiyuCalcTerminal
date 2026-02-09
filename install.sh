@@ -27,7 +27,7 @@ mkdir -p "$APP_DIR"
 
 # download jar
 echo "⬇ Downloading RiyuCalc..."
-curl -L https://raw.githubusercontent.com/nokariyu/riyucalc/main/riyucalc.jar \
+curl -L https://raw.githubusercontent.com/nokariyu/RiyuCalcTerminal/main/riyucalc.jar \
      -o "$APP_DIR/riyucalc.jar"
 
 # launcher
