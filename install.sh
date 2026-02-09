@@ -27,7 +27,7 @@ mkdir -p "$APP_DIR"
 
 # download jar
 echo "⬇ Downloading RiyuCalc..."
-curl -L https://raw.githubusercontent.com/username/riyucalc/main/riyucalc.jar \
+curl -L https://raw.githubusercontent.com/nokariyu/riyucalc/main/riyucalc.jar \
      -o "$APP_DIR/riyucalc.jar"
 
 # launcher
@@ -44,4 +44,4 @@ if ! echo "$PATH" | grep -q "$INSTALL_DIR"; then
 fi
 
 echo "Installed!"
-echo "Restart terminal, lalu ketik: riyucalc"
+echo "Restart terminal, then type: riyucalc"
