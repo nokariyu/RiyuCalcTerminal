@@ -1,74 +1,47 @@
-#!/data/data/com.termux/files/usr/bin/sh
+#!/bin/bash
 set -e
 
-APP_NAME="RiyuCalc"
-APP_DIR="$PREFIX/share/riyucalc"
-BIN_NAME="riyuc"
-REPO_RAW="https://raw.githubusercontent.com/nokariyu/RiyuCalcTerminal/main"
+echo "Installing RiyuCalc 2.0..."
 
-if ! command -v java >/dev/null 2>&1; then
-  echo "[!] Java not found."
-  echo "[!] Please install Java 21 or newer."
-  exit 1
+# detect termux
+IS_TERMUX=false
+if [ -n "$PREFIX" ] && command -v pkg &> /dev/null; then
+    IS_TERMUX=true
 fi
 
-# 2. ambil versi java (major)
-JAVA_VERSION=$(java -version 2>&1 | sed -n 's/.*"\([0-9]\+\).*/\1/p')
-
-echo "[*] Detected Java version: $JAVA_VERSION"
-
-if [ "$JAVA_VERSION" -ge 24 ]; then
-  JAR_PATH="versions/jdk24"
-elif [ "$JAVA_VERSION" -ge 21 ]; then
-  JAR_PATH="versions/jdk21"
-else
-  echo "[!] Java version too old."
-  echo "[!] Minimum supported version is Java 21."
-  exit 1
+# install dependencies
+if ! command -v java &> /dev/null; then
+    echo "Installing Java..."
+    if $IS_TERMUX; then
+        pkg install openjdk -y
+    else
+        sudo apt install default-jdk -y
+    fi
 fi
 
-echo "[*] Using JAR: $JAR_PATH"
+INSTALL_DIR="$HOME/.local/bin"
+APP_DIR="$HOME/.riyucalc"
 
-install_version() {
-  VERSION="$1"
-  JAR_NAME="RiyuCalc-$VERSION.jar"
+mkdir -p "$INSTALL_DIR"
+mkdir -p "$APP_DIR"
 
-  echo "[*] Installing $APP_NAME $VERSION"
+# download jar
+echo "⬇ Downloading RiyuCalc..."
+curl -L https://raw.githubusercontent.com/username/riyucalc/main/riyucalc.jar \
+     -o "$APP_DIR/riyucalc.jar"
 
-  mkdir -p "$APP_DIR"
-
-  curl -fsSL "$REPO_RAW/$JAR_PATH/$JAR_NAME" \
-    -o "$APP_DIR/$JAR_NAME"
-
-  cat > "$PREFIX/bin/$BIN_NAME" <<EOF
-#!/data/data/com.termux/files/usr/bin/sh
-exec java -jar "$APP_DIR/$JAR_NAME" "\$@"
+# launcher
+cat << EOF > "$INSTALL_DIR/riyucalc"
+#!/bin/bash
+java -jar $APP_DIR/riyucalc.jar "\$@"
 EOF
 
-  chmod +x "$PREFIX/bin/$BIN_NAME"
+chmod +x "$INSTALL_DIR/riyucalc"
 
-  echo "[✓] Installed $APP_NAME $VERSION"
-  echo "Run with: $BIN_NAME"
-}
+# add PATH
+if ! echo "$PATH" | grep -q "$INSTALL_DIR"; then
+    echo "export PATH=\$PATH:$INSTALL_DIR" >> ~/.bashrc
+fi
 
-case "$1" in
-  v1.0)
-    
-    install_version "1.0"
-    ;;
-  v1.1)
-    
-    install_version "1.1"
-    ;;
-  latest|"")
-    
-    install_version "1.1"
-    ;;
-  *)
-    echo "Usage:"
-    echo "  sh install.sh v1.0"
-    echo "  sh install.sh v1.1"
-    echo "  sh install.sh latest"
-    exit 1
-    ;;
-esac
+echo "Installed!"
+echo "Restart terminal, lalu ketik: riyucalc"
